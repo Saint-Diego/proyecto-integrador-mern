@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
-import { showAlertDelete, showAlertWithTimer } from "../../utils/alerts";
-import { eliminarTodo, filtrarTareas } from "../../actions";
+import { eliminarTodo, obtenerTareasPendientes } from "../../scripts/actions";
+import { useTaskContext } from "../../hooks/useTaskContext";
+import { showAlertDelete } from "../../utils/alerts";
 
 const Footer = () => {
   const [count, setCount] = useState(0);
+  const { todo, dispatch } = useTaskContext();
 
   useEffect(() => {
-    const loadData = async () => {
-      const tasksFilter = await filtrarTareas("pendiente");
-      setCount(tasksFilter?.length);
-    }
-    loadData();
-  }, []);
+    dispatch(obtenerTareasPendientes());
+    setCount(todo?.countPending);
+  }, [todo, dispatch]);
 
   const handleClickClearAll = async (e) => {
     e.preventDefault();
@@ -23,15 +22,14 @@ const Footer = () => {
       true
     );
     if (action.isConfirmed) {
-      eliminarTodo();
-      showAlertWithTimer("Tareas eliminadas correctamente", "", "success");
+      dispatch(await eliminarTodo());
     }
   };
 
   return (
     <Flex justifyContent="space-between" alignItems="center" w="100%">
       <Text m={0} color="#495057">{`Tienes ${count} tareas pendientes`}</Text>
-      <Button colorScheme="red" onClick={handleClickClearAll}>
+      <Button colorScheme="red" border="none" onClick={handleClickClearAll}>
         Limpiar Todo
       </Button>
     </Flex>

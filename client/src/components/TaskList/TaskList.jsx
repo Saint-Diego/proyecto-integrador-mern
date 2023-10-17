@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Box, List } from "@chakra-ui/react";
-import { consultarTareas } from "../../actions";
+import { consultarTareas } from "../../scripts/actions";
+import { useTaskContext } from "../../hooks/useTaskContext";
 import Task from "../Task/Task";
 
 const TaskList = ({ setInput, setOptions }) => {
-  const [tasks, setTasks] = useState([]);
+  const { todo, dispatch } = useTaskContext();
 
   useEffect(() => {
-    const cargarData = async () => {
-      const allTasks = await consultarTareas();
-      setTasks([...allTasks]);
+    const loadTasks = async () => {
+      dispatch(await consultarTareas());
     };
-    cargarData();
-  }, []);
+    loadTasks();
+  }, [dispatch]);
 
   return (
     <Box h="250px !important" overflow="auto" textAlign="start">
       <List pl={0}>
-        {tasks?.map((task, index) => (
+        {todo?.tasks?.map((task, index) => (
           <Task
             key={index}
-            id={task?.id}
+            id={task?._id}
             index={index}
-            title={task?.title}
-            description={task?.description}
-            status={task?.status}
+            nombre={task?.nombre}
+            descripcion={task?.descripcion}
+            status={task?.estado}
             setInput={setInput}
             setOptions={setOptions}
           />

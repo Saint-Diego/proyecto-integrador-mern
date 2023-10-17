@@ -9,54 +9,54 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { actualizarTarea, eliminarTarea } from "../../actions";
-import { showAlertDelete, showAlertWithTimer } from "../../utils/alerts";
+import { actualizarTarea, eliminarTarea } from "../../scripts/actions";
+import { useTaskContext } from "../../hooks/useTaskContext";
+import { showAlertDelete } from "../../utils/alerts";
 
-// const joinTitle = (value) => {
-//   return value.toLowerCase().split(" ").join("-");
-// };
+const filterState = ["completado", "pendiente"];
 
 const Task = ({
   id,
   index,
-  title,
-  description,
+  nombre,
+  descripcion,
   status,
   setInput,
   setOptions,
 }) => {
-  const [isChecked, setIsChecked] = useState(status);
+  const [isChecked, setIsChecked] = useState(status == filterState[0]);
+  const { dispatch } = useTaskContext();
 
-  useEffect(() => {
-    actualizarTarea(id, { status: isChecked });
-  }, [isChecked]);
+  // useEffect(() => {
+  //   const updateTask = async () => {
+  //     const estado = isChecked ? filterState[0] : filterState[1];
+  //     dispatch(await actualizarTarea(id, { estado }));
+  //   };
+  //   updateTask();
+  // }, [isChecked]);
 
-  const handleCheck = () => {
+  const handleCheck = async () => {
     setIsChecked(!isChecked);
+    const estado = !isChecked ? filterState[0] : filterState[1];
+    dispatch(await actualizarTarea(id, { estado }));
   };
 
   const handleClickUpdate = (e) => {
     e.preventDefault();
-    setInput((prevInput) => ({ ...prevInput, title, description }));
+    setInput((prevInput) => ({ ...prevInput, nombre, descripcion }));
     setOptions((prevOptios) => ({ ...prevOptios, id, action: "edit" }));
   };
 
   const handleClickDelete = async (e) => {
     e.preventDefault();
-    const action = await showAlertDelete(
+    const response = await showAlertDelete(
       "Advertencia",
       "¿Estás seguro de eliminarla?",
       "warning",
       true
     );
-    if (action.isConfirmed) {
-      eliminarTarea(id);
-      showAlertWithTimer(
-        `<i class="bi bi-hand-thumbs-up text-primary"></i>
-      Tarea eliminada correctamente`,
-        "",
-        "success"
-      );
+    if (response.isConfirmed) {
+      dispatch(await eliminarTarea(id));
     }
   };
 
@@ -73,10 +73,11 @@ const Task = ({
               me={1}
               textDecoration={`${isChecked && "line-through"}`}
               id={`task-${index}`}
-              checked={isChecked}
+              isChecked={isChecked}
+              // checked={isChecked}
               onChange={handleCheck}
             >
-              {title}
+              {nombre}
             </Checkbox>
             <Badge ml={1} bgColor="transparent">
               <Button
@@ -105,7 +106,7 @@ const Task = ({
               </Button>
             </Badge>
           </Flex>
-          <Text fontSize="md">{description}</Text>
+          <Text fontSize="md">{descripcion}</Text>
         </Box>
       </Flex>
     </ListItem>

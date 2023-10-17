@@ -6,8 +6,6 @@ const routesTask = require("./routes/routesTask");
 
 const methods = ["GET", "POST", "PUT", "DELETE"];
 
-require("./db");
-
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
@@ -15,9 +13,12 @@ app.use("/tareas", routesTask);
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   next();
 });
 

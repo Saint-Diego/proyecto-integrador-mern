@@ -9,14 +9,14 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import { MdOutlineAdd, MdOutlineModeEdit } from "react-icons/md";
-import { actualizarTarea, crearTarea } from "../../actions";
+import { actualizarTarea, crearTarea } from "../../scripts/actions";
+import { useTaskContext } from "../../hooks/useTaskContext";
 import { validateTask } from "../../utils/validate";
-import { showAlertWithTimer } from "../../utils/alerts";
 import TaskList from "../TaskList/TaskList";
 
 const newInput = {
-  title: "",
-  description: "",
+  nombre: "",
+  descripcion: "",
 };
 
 const isObjectEmpty = (objectName) => {
@@ -31,6 +31,7 @@ const FormTask = () => {
   const [error, setError] = useState({});
   const [isDisabled, setIsDisabled] = useState(true);
   const [options, setOptions] = useState({ id: 0, action: SAVE });
+  const { dispatch } = useTaskContext();
   const inputRef = useRef();
 
   useEffect(() => {
@@ -38,7 +39,7 @@ const FormTask = () => {
   }, []);
 
   useEffect(() => {
-    if (input.title && input.description) setIsDisabled(false);
+    if (input.nombre && input.descripcion) setIsDisabled(false);
     else setIsDisabled(true);
   }, [input]);
 
@@ -47,25 +48,13 @@ const FormTask = () => {
     setError(validateTask({ ...input, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isObjectEmpty(error)) {
       if (options.action === SAVE) {
-        crearTarea(input);
-        showAlertWithTimer(
-          `<i class="bi bi-hand-thumbs-up text-primary"></i>
-          Tarea guardada correctamente`,
-          "",
-          "success"
-        );
+        dispatch(await crearTarea(input));
       } else if (options.action === EDIT) {
-        actualizarTarea(options.id, input);
-        showAlertWithTimer(
-          `<i class="bi bi-hand-thumbs-up text-primary"></i>
-          Tarea actualizada correctamente`,
-          "",
-          "success"
-        );
+        dispatch(await actualizarTarea(options.id, input));
         setOptions({ ...options, action: SAVE });
       }
       clearInputs();
@@ -89,25 +78,25 @@ const FormTask = () => {
         <Input
           my={1}
           id="task"
-          name="title"
+          name="nombre"
           ref={inputRef}
-          value={input.title}
+          value={input.nombre}
           placeholder="Ingrese tarea"
           onChange={handleChange}
-          isInvalid={error.title}
+          isInvalid={error.nombre}
         />
-        {error.title && showMessageError(error.title)}
+        {error.nombre && showMessageError(error.nombre)}
         <Textarea
           id="description"
-          name="description"
+          name="descripcion"
           cols="10"
           rows="3"
-          value={input.description}
+          value={input.descripcion}
           placeholder="Ingrese una breve descripción"
           onChange={handleChange}
-          isInvalid={error.description}
+          isInvalid={error.descripcion}
         ></Textarea>
-        {error.description && showMessageError(error.description)}
+        {error.descripcion && showMessageError(error.descripcion)}
         <Button
           my={1}
           w="100%"
