@@ -29,7 +29,7 @@ const taskReducer = (state, action) => {
     case DELETE_ALL_TASKS:
       return {
         ...state,
-        task: [],
+        tasks: [],
         countPending: 0,
       };
     case ALL_TASKS:

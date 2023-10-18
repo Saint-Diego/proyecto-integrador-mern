@@ -112,7 +112,7 @@ const FormTask = () => {
           )}
         </Button>
       </FormControl>
-      <Divider borderColor="blackAlpha.500" />
+      <Divider borderColor="blackAlpha.500" mb={2}/>
       <TaskList setInput={setInput} setOptions={setOptions} />
     </>
   );
