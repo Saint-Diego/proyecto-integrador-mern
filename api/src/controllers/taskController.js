@@ -30,12 +30,15 @@ const createTask = async (req, res) => {
 const updateTask = async (req, res) => {
   const { id } = req.params;
   try {
-    const taskFinded = await TaskModel.findByIdAndUpdate(new ObjectId(id), {
-      ...req.body,
-    });
-    if (!taskFinded)
+    const taskUpdated = await TaskModel.findByIdAndUpdate(
+      id.toString(),
+      {
+        ...req.body,
+      },
+      { new: true }
+    );
+    if (!taskUpdated)
       return res.status(404).json({ error: `Tarea con ID ${id} no existe` });
-    const taskUpdated = await TaskModel.findById(new ObjectId(id));
     res
       .status(200)
       .json({ msg: "Tarea actualizada correctamente", task: taskUpdated });
@@ -47,7 +50,7 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
   const { id } = req.params;
   try {
-    const taskDeleted = await TaskModel.findByIdAndDelete(new ObjectId(id));
+    const taskDeleted = await TaskModel.findByIdAndDelete(id.toString());
     if (!taskDeleted)
       return res.status(404).json({ error: `Tarea con ID ${id} no existe` });
     res.status(200).json({ msg: "Tarea eliminada correctamente" });
@@ -58,8 +61,8 @@ const deleteTask = async (req, res) => {
 
 const deleteAllTasks = async (req, res) => {
   try {
-    const task = await TaskModel.deleteMany({});
-    if (task.deletedCount <= 0)
+    const tasks = await TaskModel.deleteMany({});
+    if (tasks.deletedCount <= 0)
       return res.status(400).json({ error: `Error al eliminar las tareas` });
     res.status(200).json({ msg: "Tareas eliminadas correctamente" });
   } catch (error) {
@@ -70,7 +73,7 @@ const deleteAllTasks = async (req, res) => {
 const getAllTasks = async (req, res) => {
   let tasks;
   try {
-    if (isObjectEmpty(req.query)) tasks = await TaskModel.find({});
+    if (isObjectEmpty(req.query)) tasks = await TaskModel.find();
     else {
       const { state } = req.query;
       if (state) {
@@ -94,10 +97,10 @@ const getAllTasks = async (req, res) => {
 const getTaskById = async (req, res) => {
   const { id } = req.params;
   try {
-    const task = await TaskModel.findById(new ObjectId(id));
-    if (!task)
+    const taskFinded = await TaskModel.findById(id.toString());
+    if (!taskFinded)
       return res.status(404).json({ error: `Tarea con ID ${id} no existe` });
-    res.status(200).json(task);
+    res.status(200).json(taskFinded);
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
   }
