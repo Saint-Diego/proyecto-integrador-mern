@@ -28,5 +28,3 @@ app.listen(port, async () => {
   await connectDB();
   console.log(`server running at http://${host}:${port}`);
 });
-
-module.exports = app;

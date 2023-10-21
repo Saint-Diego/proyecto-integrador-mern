@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "react-tasks-list",
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
