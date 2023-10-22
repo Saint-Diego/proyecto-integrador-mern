@@ -1,6 +1,5 @@
 const { validationResult } = require("express-validator");
 const TaskModel = require("../models/task");
-const isObjectEmpty = require("../utils/isObjectEmpty");
 
 const createTask = async (req, res) => {
   const errors = validationResult(req);
@@ -13,7 +12,7 @@ const createTask = async (req, res) => {
     if (taskFinded)
       throw new Error(`Tarea con nombre ${nombre}, ya se encuentra registrada`);
     const newTask = new TaskModel({ title, description });
-    const taskCreated = await newTask.save(req.body);
+    const taskCreated = await newTask.save();
     res
       .status(201)
       .json({ message: "Tarea guardada correctamente", task: taskCreated });

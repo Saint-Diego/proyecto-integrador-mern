@@ -1,6 +1,6 @@
-import { getFilterTasks } from "../../controllers/taskController";
+// import { getFilterTasks } from "../../controllers/taskController";
 
-// const TaskModel = require("../../models/task");
+const TaskModel = require("../../models/task");
 const isObjectEmpty = require("../isObjectEmpty");
 
 const filters = [true, false];
@@ -17,13 +17,19 @@ export const setHeader = (req, res, next) => {
 };
 
 export const validateQueryParams = async (req, res, next) => {
-  if (!isObjectEmpty(req.query)) {
-    const { isCompleted } = req.query;
-    if (typeof isCompleted != "undefined") {
-      if (filters.includes(isCompleted)) getFilterTasks(req, res);
-      else throw new Error("Valor de consulta inválido");
-    } else throw new Error("Parámetro de consulta inválido");
-  } else next();
+  try {
+    if (!isObjectEmpty(req.query)) {
+      const { isCompleted } = req.query;
+      if (typeof isCompleted != "undefined") {
+        if (filters.includes(isCompleted)) {
+          const tasks = await TaskModel.find({ isCompleted });
+          return res.status(200).json(tasks);
+        } else throw new Error("Valor de consulta inválido");
+      } else throw new Error("Parámetro de consulta inválido");
+    } else next();
+  } catch (error) {
+    throw new Error("Error interno del servidor");
+  }
 };
 
 export const emptyBody = (req, res, next) => {

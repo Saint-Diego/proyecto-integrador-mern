@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const routesTask = require("./routes/routesTask");
-const { setHeader } = require("./utils/middlewares");
+const { setHeader } = require("./utils/middlewares/index");
 
 const methods = ["GET", "POST", "PUT", "DELETE"];
 
