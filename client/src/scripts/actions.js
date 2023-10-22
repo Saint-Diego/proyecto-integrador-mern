@@ -21,7 +21,7 @@ export const crearTarea = async (input) => {
       payload: data.task,
     };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     showAlertWithTimer(`${error.message}`, "", "error");
   }
 };
