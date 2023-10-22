@@ -9,20 +9,18 @@ const {
   getAllTasks,
   getTaskById,
 } = require("../controllers/taskController");
-const isObjectEmpty = require("../utils/isObjectEmpty");
-
-const emptyBody = (req, res, next) => {
-  if (!isObjectEmpty(req.body)) next();
-  else res.status(400).json({ error: "Envíe como mínimo un campo" });
-};
+const {
+  emptyBody,
+  validateQueryParams,
+} = require("../utils/middlewares/index");
 
 routesTask
   .route("/")
-  .get(getAllTasks)
+  .get(validateQueryParams, getAllTasks)
   .post(
     [
-      check("nombre", "El nombre es obligatorio").not().isEmpty(),
-      check("descripcion", "La descripción es obligatoria").not().isEmpty(),
+      check("title", "El nombre es obligatorio").not().isEmpty(),
+      check("description", "La descripción es obligatoria").not().isEmpty(),
     ],
     createTask
   )

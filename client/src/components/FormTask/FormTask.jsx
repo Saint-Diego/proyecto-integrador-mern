@@ -15,8 +15,8 @@ import { validateTask } from "../../utils/validate";
 import TaskList from "../TaskList/TaskList";
 
 const newInput = {
-  nombre: "",
-  descripcion: "",
+  title: "",
+  description: "",
 };
 
 const isObjectEmpty = (objectName) => {
@@ -39,7 +39,7 @@ const FormTask = () => {
   }, []);
 
   useEffect(() => {
-    if (input.nombre && input.descripcion) setIsDisabled(false);
+    if (input.title && input.description) setIsDisabled(false);
     else setIsDisabled(true);
   }, [input]);
 
@@ -78,25 +78,25 @@ const FormTask = () => {
         <Input
           my={1}
           id="task"
-          name="nombre"
+          name="title"
           ref={inputRef}
-          value={input.nombre}
+          value={input.title}
           placeholder="Ingrese tarea"
           onChange={handleChange}
-          isInvalid={error.nombre}
+          isInvalid={error.title}
         />
-        {error.nombre && showMessageError(error.nombre)}
+        {error.title && showMessageError(error.title)}
         <Textarea
           id="description"
-          name="descripcion"
+          name="description"
           cols="10"
           rows="3"
-          value={input.descripcion}
+          value={input.description}
           placeholder="Ingrese una breve descripción"
           onChange={handleChange}
-          isInvalid={error.descripcion}
+          isInvalid={error.description}
         ></Textarea>
-        {error.descripcion && showMessageError(error.descripcion)}
+        {error.description && showMessageError(error.description)}
         <Button
           my={1}
           w="100%"

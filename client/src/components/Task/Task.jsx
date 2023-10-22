@@ -13,18 +13,16 @@ import { actualizarTarea, eliminarTarea } from "../../scripts/actions";
 import { useTaskContext } from "../../hooks/useTaskContext";
 import { showAlertDelete } from "../../utils/alerts";
 
-const filterState = ["completado", "pendiente"];
-
 const Task = ({
   id,
   index,
-  nombre,
-  descripcion,
-  status,
+  title,
+  description,
+  isCompleted,
   setInput,
   setOptions,
 }) => {
-  const [isChecked, setIsChecked] = useState(status == filterState[0]);
+  const [isChecked, setIsChecked] = useState(isCompleted);
   const { dispatch } = useTaskContext();
 
   // useEffect(() => {
@@ -37,13 +35,12 @@ const Task = ({
 
   const handleCheck = async () => {
     setIsChecked(!isChecked);
-    const estado = !isChecked ? filterState[0] : filterState[1];
-    dispatch(await actualizarTarea(id, { estado }));
+    dispatch(await actualizarTarea(id, { isCompleted: !isChecked }));
   };
 
   const handleClickUpdate = (e) => {
     e.preventDefault();
-    setInput((prevInput) => ({ ...prevInput, nombre, descripcion }));
+    setInput((prevInput) => ({ ...prevInput, title, description }));
     setOptions((prevOptios) => ({ ...prevOptios, id, action: "edit" }));
   };
 
@@ -77,7 +74,7 @@ const Task = ({
               // checked={isChecked}
               onChange={handleCheck}
             >
-              {nombre}
+              {title}
             </Checkbox>
             <Badge ml={1} bgColor="transparent">
               <Button
@@ -106,7 +103,7 @@ const Task = ({
               </Button>
             </Badge>
           </Flex>
-          <Text fontSize="md">{descripcion}</Text>
+          <Text fontSize="md">{description}</Text>
         </Box>
       </Flex>
     </ListItem>

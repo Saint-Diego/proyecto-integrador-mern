@@ -4,9 +4,14 @@ const { mongo_uri } = require("./config/index");
 
 const connectDB = () => {
   mongoose
-    .connect(mongo_uri)
-    .then(() => console.log("Connecting database..."))
-    .catch((error) => console.log(error));
+    .connect(mongo_uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => console.log("Database connected"))
+    .catch((error) =>
+      console.error(`Error when connecting the database: ${error}`)
+    );
   return mongoose.connection;
 };
 

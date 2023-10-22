@@ -1,8 +1,6 @@
 const { validationResult } = require("express-validator");
-const TaskModel = require("../model/task");
+const TaskModel = require("../models/task");
 const isObjectEmpty = require("../utils/isObjectEmpty");
-
-const filters = ["completado", "pendiente"];
 
 const createTask = async (req, res) => {
   const errors = validationResult(req);
@@ -10,11 +8,11 @@ const createTask = async (req, res) => {
     throw new Error("Todos los campos son obligatorios");
   }
   try {
-    const { nombre, descripcion } = req.body;
-    const taskFinded = await TaskModel.findOne({ nombre });
+    const { title, description } = req.body;
+    const taskFinded = await TaskModel.findOne({ title });
     if (taskFinded)
       throw new Error(`Tarea con nombre ${nombre}, ya se encuentra registrada`);
-    const newTask = new TaskModel({ nombre, descripcion });
+    const newTask = new TaskModel({ title, description });
     const taskCreated = await newTask.save(req.body);
     res
       .status(201)
@@ -66,18 +64,19 @@ const deleteAllTasks = async (req, res) => {
 };
 
 const getAllTasks = async (req, res) => {
-  let tasks;
   try {
-    if (isObjectEmpty(req.query)) tasks = await TaskModel.find();
-    else {
-      const { state } = req.query;
-      if (state) {
-        if (filters.includes(state))
-          tasks = await TaskModel.find({ estado: state });
-        else throw new Error("Valor de consulta inválido");
-      } else throw new Error("Parámetro de consulta inválido");
-    }
+    const tasks = await TaskModel.find();
     res.status(200).json(tasks);
+  } catch (error) {
+    throw new Error("Error interno del servidor");
+  }
+};
+
+const getFilterTasks = async (req, res) => {
+  const { isCompleted } = req.query;
+  try {
+    const tasks = await TaskModel.find({ isCompleted });
+    return res.status(200).json(tasks);
   } catch (error) {
     throw new Error("Error interno del servidor");
   }
@@ -100,5 +99,6 @@ module.exports = {
   deleteTask,
   deleteAllTasks,
   getAllTasks,
+  getFilterTasks,
   getTaskById,
 };

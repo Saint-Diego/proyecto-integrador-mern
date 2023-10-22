@@ -22,9 +22,9 @@ const TaskList = ({ setInput, setOptions }) => {
             key={index}
             id={task?._id}
             index={index}
-            nombre={task?.nombre}
-            descripcion={task?.descripcion}
-            status={task?.estado}
+            title={task?.title}
+            description={task?.description}
+            isCompleted={task?.isCompleted}
             setInput={setInput}
             setOptions={setOptions}
           />
