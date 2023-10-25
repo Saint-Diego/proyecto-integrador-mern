@@ -10,14 +10,16 @@ const createTask = async (req, res) => {
     const { title, description } = req.body;
     const taskFinded = await TaskModel.findOne({ title });
     if (taskFinded)
-      throw new Error(`Tarea con nombre ${nombre}, ya se encuentra registrada`);
+      res.status(400).json({
+        message: `Tarea con nombre ${nombre}, ya se encuentra registrada`,
+      });
     const newTask = new TaskModel({ title, description });
     const taskCreated = await newTask.save();
     res
       .status(201)
       .json({ message: "Tarea guardada correctamente", task: taskCreated });
   } catch (error) {
-    throw new Error("Error interno del servidor");
+    throw new Error(error.message);
   }
 };
 
@@ -31,23 +33,21 @@ const updateTask = async (req, res) => {
       },
       { new: true }
     );
-    if (!taskUpdated) throw new Error(`Tarea con ID ${id} no existe`);
     res
       .status(200)
       .json({ message: "Tarea actualizada correctamente", task: taskUpdated });
   } catch (error) {
-    throw new Error("Error interno del servidor");
+    throw new Error(error.message);
   }
 };
 
 const deleteTask = async (req, res) => {
   const { id } = req.params;
   try {
-    const taskDeleted = await TaskModel.findByIdAndDelete(id.toString());
-    if (!taskDeleted) throw new Error(`Tarea con ID ${id} no existe`);
+    await TaskModel.findByIdAndDelete(id.toString());
     res.status(200).json({ message: "Tarea eliminada correctamente" });
   } catch (error) {
-    throw new Error("Error interno del servidor");
+    throw new Error(error.message);
   }
 };
 
@@ -58,7 +58,7 @@ const deleteAllTasks = async (req, res) => {
       throw new Error("Error al eliminar las tareas");
     res.status(200).json({ message: "Tareas eliminadas correctamente" });
   } catch (error) {
-    throw new Error("Error interno del servidor");
+    throw new Error(error.message);
   }
 };
 
@@ -67,7 +67,7 @@ const getAllTasks = async (req, res) => {
     const tasks = await TaskModel.find();
     res.status(200).json(tasks);
   } catch (error) {
-    throw new Error("Error interno del servidor");
+    throw new Error(error.message);
   }
 };
 
@@ -77,7 +77,7 @@ const getFilterTasks = async (req, res) => {
     const tasks = await TaskModel.find({ isCompleted });
     return res.status(200).json(tasks);
   } catch (error) {
-    throw new Error("Error interno del servidor");
+    throw new Error(error.message);
   }
 };
 
@@ -85,10 +85,11 @@ const getTaskById = async (req, res) => {
   const { id } = req.params;
   try {
     const taskFinded = await TaskModel.findById(id.toString());
-    if (!taskFinded) throw new Error(`Tarea con ID ${id} no existe`);
+    if (!taskFinded)
+      res.status(404).json({ message: `Tarea con ID ${id} no existe` });
     res.status(200).json(taskFinded);
   } catch (error) {
-    throw new Error("Error interno del servidor");
+    throw new Error(error.message);
   }
 };
 

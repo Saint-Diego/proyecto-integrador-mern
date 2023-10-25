@@ -21,7 +21,6 @@ export const crearTarea = async (input) => {
       payload: data.task,
     };
   } catch (error) {
-    console.log(error);
     showAlertWithTimer(`${error.message}`, "", "error");
   }
 };
@@ -29,7 +28,7 @@ export const crearTarea = async (input) => {
 export const actualizarTarea = async (id, input) => {
   try {
     const { data } = await axios.put(`${url_api}/tareas/${id}`, input);
-    if (!input?.estado)
+    if (!input?.isCompleted)
       showAlertWithTimer(`${icon}\n${data.message}`, "", "success");
     return {
       type: UPDATE_TASK,

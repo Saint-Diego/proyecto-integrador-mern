@@ -11,7 +11,6 @@ const taskSchema = new Schema({
   },
   isCompleted: {
     type: Boolean,
-    enum: [false, true],
     default: false,
   },
 });

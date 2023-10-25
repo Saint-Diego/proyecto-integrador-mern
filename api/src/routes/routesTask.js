@@ -9,10 +9,11 @@ const {
   getAllTasks,
   getTaskById,
 } = require("../controllers/taskController");
-const {
-  emptyBody,
-  validateQueryParams,
-} = require("../utils/middlewares/index");
+const existsTask = require("../utils/middlewares/existsTask");
+const validateQueryParams = require("../utils/middlewares/validateQueryParams");
+const emptyBody = require("../utils/middlewares/emptyBody");
+
+routesTask.use("/:id", existsTask);
 
 routesTask
   .route("/")
