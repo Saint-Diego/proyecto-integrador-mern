@@ -11,7 +11,7 @@ const Footer = () => {
   useEffect(() => {
     dispatch(obtenerTareasPendientes());
     setCount(todo?.countPending);
-  }, [todo?.tasks, dispatch]);
+  }, [todo, dispatch]);
 
   const handleClickClearAll = async (e) => {
     e.preventDefault();

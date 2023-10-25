@@ -28,7 +28,7 @@ export const crearTarea = async (input) => {
 export const actualizarTarea = async (id, input) => {
   try {
     const { data } = await axios.put(`${url_api}/tareas/${id}`, input);
-    if (!input?.isCompleted)
+    if (typeof input?.isCompleted == "undefined")
       showAlertWithTimer(`${icon}\n${data.message}`, "", "success");
     return {
       type: UPDATE_TASK,

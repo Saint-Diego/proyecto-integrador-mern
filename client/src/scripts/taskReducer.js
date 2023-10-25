@@ -40,7 +40,7 @@ const taskReducer = (state, action) => {
     case TASKS_PENDING:
       return {
         ...state,
-        countPending: state.tasks.filter((task) => task.estado == "pendiente")
+        countPending: state.tasks.filter((task) => task.isCompleted == false)
           .length,
       };
     default:
