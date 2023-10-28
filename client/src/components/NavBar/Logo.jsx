@@ -4,8 +4,12 @@ import { Image } from "@chakra-ui/react";
 
 const Logo = ({ size }) => {
   return (
-    <Link to="/">
-      <Image src={"../src/assets/To-Do-icon.png"} alt="thumbnail" width={size} />
+    <Link to="/home">
+      <Image
+        src="https://res.cloudinary.com/dah19wrh1/image/upload/c_thumb,w_200,g_face/v1698532631/dev/assets/To-Do_icon.png"
+        alt="thumbnail"
+        width={size}
+      />
     </Link>
   );
 };
