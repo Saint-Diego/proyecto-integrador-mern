@@ -3,8 +3,12 @@ import taskReducer from "../scripts/taskReducer";
 import { TaskContext } from "./createContextTask";
 
 const initialState = {
+  user: {},
+  isActive: false,
   tasks: [],
   countPending: 0,
+  errors: "",
+  success: "",
 };
 
 const ContextTask = ({ children }) => {

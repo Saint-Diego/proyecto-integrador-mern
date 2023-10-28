@@ -4,6 +4,7 @@ const cors = require("cors");
 const app = express();
 const setHeader = require("./utils/middlewares/setHeader");
 const routesTask = require("./routes/routesTask");
+const routesUser = require("./routes/routesUser");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
   <p>Welcome, to the server with express</p>`);
 });
 
+app.use("/user", routesUser);
 app.use("/tareas", routesTask);
 
 module.exports = app;

@@ -1,5 +1,20 @@
 import Swal from "sweetalert2";
 
+export const showAlertToast = (titulo, tipo) => {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 1000,
+    timerProgressBar: true,
+  });
+
+  return Toast.fire({
+    icon: tipo,
+    title: titulo,
+  });
+};
+
 export const showAlertWithTimer = (titulo, mensaje, tipo) => {
   return Swal.fire({
     title: titulo,

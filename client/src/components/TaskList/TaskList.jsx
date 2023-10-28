@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Box, List } from "@chakra-ui/react";
-import { consultarTareas } from "../../scripts/actions";
+import { consultarTareasPorUsuario } from "../../scripts/actions";
 import { useTaskContext } from "../../hooks/useTaskContext";
 import Task from "../Task/Task";
 
@@ -9,7 +9,7 @@ const TaskList = ({ setInput, setOptions }) => {
 
   useEffect(() => {
     const loadTasks = async () => {
-      dispatch(await consultarTareas());
+      dispatch(await consultarTareasPorUsuario(todo?.user?.id));
     };
     loadTasks();
   }, [dispatch]);

@@ -1,19 +1,24 @@
 const { validationResult } = require("express-validator");
+const { Types } = require("mongoose");
 const TaskModel = require("../models/task");
 
 const createTask = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new Error("Todos los campos son obligatorios");
+    return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
   try {
-    const { title, description } = req.body;
+    const { title, description, _userId } = req.body;
     const taskFinded = await TaskModel.findOne({ title });
     if (taskFinded)
-      res.status(400).json({
-        message: `Tarea con nombre ${nombre}, ya se encuentra registrada`,
+      return res.status(400).json({
+        error: `Tarea con nombre ${title}, ya se encuentra registrada`,
       });
-    const newTask = new TaskModel({ title, description });
+    const newTask = new TaskModel({
+      title,
+      description,
+      _userId: new Types.ObjectId(_userId),
+    });
     const taskCreated = await newTask.save();
     res
       .status(201)
@@ -27,10 +32,8 @@ const updateTask = async (req, res) => {
   const { id } = req.params;
   try {
     const taskUpdated = await TaskModel.findByIdAndUpdate(
-      id.toString(),
-      {
-        ...req.body,
-      },
+      id,
+      { ...req.body },
       { new: true }
     );
     res
@@ -44,7 +47,7 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
   const { id } = req.params;
   try {
-    await TaskModel.findByIdAndDelete(id.toString());
+    await TaskModel.findByIdAndDelete(id);
     res.status(200).json({ message: "Tarea eliminada correctamente" });
   } catch (error) {
     throw new Error(error.message);
@@ -84,9 +87,9 @@ const getFilterTasks = async (req, res) => {
 const getTaskById = async (req, res) => {
   const { id } = req.params;
   try {
-    const taskFinded = await TaskModel.findById(id.toString());
+    const taskFinded = await TaskModel.findById(id);
     if (!taskFinded)
-      res.status(404).json({ message: `Tarea con ID ${id} no existe` });
+      return res.status(404).json({ error: `Tarea con ID ${id} no existe` });
     res.status(200).json(taskFinded);
   } catch (error) {
     throw new Error(error.message);

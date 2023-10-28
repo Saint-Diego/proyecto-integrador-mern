@@ -5,8 +5,10 @@ import {
   Divider,
   Textarea,
   Input,
-  Tag,
   FormControl,
+  Alert,
+  AlertIcon,
+  AlertDescription,
 } from "@chakra-ui/react";
 import { MdOutlineAdd, MdOutlineModeEdit } from "react-icons/md";
 import { actualizarTarea, crearTarea } from "../../scripts/actions";
@@ -17,6 +19,7 @@ import TaskList from "../TaskList/TaskList";
 const newInput = {
   title: "",
   description: "",
+  _userId: 0,
 };
 
 const isObjectEmpty = (objectName) => {
@@ -31,7 +34,7 @@ const FormTask = () => {
   const [error, setError] = useState({});
   const [isDisabled, setIsDisabled] = useState(true);
   const [options, setOptions] = useState({ id: 0, action: SAVE });
-  const { dispatch } = useTaskContext();
+  const { todo, dispatch } = useTaskContext();
   const inputRef = useRef();
 
   useEffect(() => {
@@ -52,9 +55,14 @@ const FormTask = () => {
     e.preventDefault();
     if (isObjectEmpty(error)) {
       if (options.action === SAVE) {
-        dispatch(await crearTarea(input));
+        dispatch(await crearTarea({ ...input, _userId: todo?.user?.id }));
       } else if (options.action === EDIT) {
-        dispatch(await actualizarTarea(options.id, input));
+        dispatch(
+          await actualizarTarea(options.id, {
+            ...input,
+            _userId: todo?.user?.id,
+          })
+        );
         setOptions({ ...options, action: SAVE });
       }
       clearInputs();
@@ -67,9 +75,13 @@ const FormTask = () => {
   };
 
   const showMessageError = (value) => (
-    <Tag my={1} py={3} w="100%" justifyContent="center" colorScheme="red">
-      {value}
-    </Tag>
+    <Alert status="error">
+      <AlertIcon />
+      <AlertDescription color="red.700">{value}</AlertDescription>
+    </Alert>
+    // <Tag my={1} py={3} w="100%" justifyContent="center" colorScheme="red">
+    //   {value}
+    // </Tag>
   );
 
   return (
@@ -81,6 +93,7 @@ const FormTask = () => {
           name="title"
           ref={inputRef}
           value={input.title}
+          required
           placeholder="Ingrese tarea"
           onChange={handleChange}
           isInvalid={error.title}
@@ -92,6 +105,7 @@ const FormTask = () => {
           cols="10"
           rows="3"
           value={input.description}
+          required
           placeholder="Ingrese una breve descripción"
           onChange={handleChange}
           isInvalid={error.description}
@@ -112,7 +126,7 @@ const FormTask = () => {
           )}
         </Button>
       </FormControl>
-      <Divider borderColor="blackAlpha.500" mb={2}/>
+      <Divider borderColor="blackAlpha.500" mb={2} />
       <TaskList setInput={setInput} setOptions={setOptions} />
     </>
   );

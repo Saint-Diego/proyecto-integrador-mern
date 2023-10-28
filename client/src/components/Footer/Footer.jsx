@@ -5,13 +5,11 @@ import { useTaskContext } from "../../hooks/useTaskContext";
 import { showAlertDelete } from "../../utils/alerts";
 
 const Footer = () => {
-  const [count, setCount] = useState(0);
   const { todo, dispatch } = useTaskContext();
 
   useEffect(() => {
     dispatch(obtenerTareasPendientes());
-    setCount(todo?.countPending);
-  }, [todo, dispatch]);
+  }, [todo?.tasks, dispatch]);
 
   const handleClickClearAll = async (e) => {
     e.preventDefault();
@@ -28,7 +26,7 @@ const Footer = () => {
 
   return (
     <Flex justifyContent="space-between" alignItems="center" w="100%">
-      <Text m={0} color="#495057">{`Tienes ${count} tareas pendientes`}</Text>
+      <Text m={0} color="#495057">{`Tienes ${todo?.countPending} tareas pendientes`}</Text>
       <Button colorScheme="red" border="none" onClick={handleClickClearAll}>
         Limpiar Todo
       </Button>
