@@ -5,7 +5,7 @@ import { useTaskContext } from "../hooks/useTaskContext";
 const PrivateRoute = ({ redirectPath = "" }) => {
   const { todo } = useTaskContext();
 
-  if (!todo?.isActive) {
+  if (!todo?.user?.token) {
     return <Navigate to={redirectPath} replace />;
   } else {
     return <Outlet />;

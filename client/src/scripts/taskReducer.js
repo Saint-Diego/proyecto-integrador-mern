@@ -24,7 +24,7 @@ const taskReducer = (state, action) => {
     case LOGOUT:
       return {
         ...state,
-        user: "",
+        user: {},
         isActive: false,
         error: "",
         success: "",
