@@ -17,7 +17,8 @@ const taskReducer = (state, action) => {
     case LOGIN:
       return {
         ...state,
-        user: { ...state.user, ...action.payload },
+        user: { ...state.user, ...action.payload?.user },
+        token: action.payload?.token,
         isActive: true,
         error: "",
       };

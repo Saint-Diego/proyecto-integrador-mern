@@ -4,6 +4,7 @@ import { TaskContext } from "./createContextTask";
 
 const initialState = {
   user: {},
+  token: "",
   isActive: false,
   tasks: [],
   countPending: 0,

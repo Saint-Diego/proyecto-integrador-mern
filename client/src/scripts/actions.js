@@ -24,7 +24,7 @@ export const login = async (input) => {
     await showAlertWithTimer(`${icon}\n${data.message}`, "", "success");
     return {
       type: LOGIN,
-      payload: data.user,
+      payload: data,
     };
   } catch ({ response }) {
     return {
