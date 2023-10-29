@@ -26,6 +26,7 @@ const taskReducer = (state, action) => {
       return {
         ...state,
         user: {},
+        token: "",
         isActive: false,
         error: "",
         success: "",
@@ -80,6 +81,17 @@ const taskReducer = (state, action) => {
       return {
         ...state,
         error: "",
+        success: "",
+      };
+    case CLEAR_ALL:
+      return {
+        ...state,
+        user: {},
+        token: "",
+        isActive: false,
+        tasks: [],
+        countPending: 0,
+        errors: "",
         success: "",
       };
     case ERROR:

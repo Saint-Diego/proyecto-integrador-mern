@@ -9,3 +9,4 @@ export const ALL_TASKS = "ALL_TASKS";
 export const TASKS_PENDING = "GET_TASKS_PENDING";
 export const ERROR = "ERROR";
 export const CLEAR_LOGS = "CLEAR_LOGS";
+export const CLEAR_ALL = "CLEAR_ALL";

@@ -154,3 +154,9 @@ export const clearLogs = () => {
     type: CLEAR_LOGS,
   };
 };
+
+export const clearAll = () => {
+  return {
+    type: CLEAR_ALL,
+  };
+};
