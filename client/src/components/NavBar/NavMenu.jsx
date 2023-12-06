@@ -5,11 +5,12 @@ import { logout } from "../../scripts/actions";
 import NavLink from "./NavLink";
 
 const NavMenu = ({ direction }) => {
-  const { todo, dispatch } = useTaskContext();
+  const { user, setUser, dispatch } = useTaskContext();
 
   const handleLogout = async (e) => {
     e.preventDefault();
     dispatch(await logout());
+    setUser({});
   };
 
   return (
@@ -17,11 +18,11 @@ const NavMenu = ({ direction }) => {
       {/* <NavLink href="#" text={todo?.user?.username} /> */}
       <Tooltip
         hasArrow
-        label={todo?.user?.username}
+        label={user?.username}
         bg="gray.300"
         color="black"
       >
-        <Avatar name={todo?.user?.username} />
+        <Avatar name={user?.username} />
       </Tooltip>
       <NavLink
         href="#"

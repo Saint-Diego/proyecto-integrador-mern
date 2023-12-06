@@ -5,11 +5,11 @@ import { useTaskContext } from "../../hooks/useTaskContext";
 import Task from "../Task/Task";
 
 const TaskList = ({ setInput, setOptions }) => {
-  const { todo, dispatch } = useTaskContext();
+  const { todo, user, dispatch } = useTaskContext();
 
   useEffect(() => {
     const loadTasks = async () => {
-      dispatch(await consultarTareasPorUsuario(todo?.user?.id));
+      dispatch(await consultarTareasPorUsuario(user?.id, user?.token));
     };
     loadTasks();
   }, [dispatch]);

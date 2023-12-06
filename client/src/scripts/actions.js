@@ -12,6 +12,7 @@ import {
   TASKS_PENDING,
   ERROR,
   CLEAR_LOGS,
+  CLEAR_ALL,
 } from "./type";
 import { showAlertToast, showAlertWithTimer } from "../utils/alerts";
 
@@ -61,9 +62,13 @@ export const register = async (input) => {
   }
 };
 
-export const consultarTareasPorUsuario = async (id) => {
+export const consultarTareasPorUsuario = async (id, token) => {
+  // Configuración de la solicitud con encabezados
+  const headers = {
+    authorization: `Bearer ${token}`,
+  };
   try {
-    const { data } = await axios(`${url_api}/user?id=${id}`);
+    const { data } = await axios(`${url_api}/user?id=${id}`, { headers });
     return {
       type: ALL_TASKS,
       payload: data,
@@ -74,9 +79,13 @@ export const consultarTareasPorUsuario = async (id) => {
 };
 
 // Funciones para consumir los end-points de task
-export const crearTarea = async (input) => {
+export const crearTarea = async (input, token) => {
+  // Configuración de la solicitud con encabezados
+  const headers = {
+    authorization: `Bearer ${token}`,
+  };
   try {
-    const { data } = await axios.post(`${url_api}/tareas`, input);
+    const { data } = await axios.post(`${url_api}/tareas`, input, { headers });
     await showAlertWithTimer(`${icon}\n${data.message}`, "", "success");
     return {
       type: ADD_TASK,
@@ -91,9 +100,15 @@ export const crearTarea = async (input) => {
   }
 };
 
-export const actualizarTarea = async (id, input) => {
+export const actualizarTarea = async (id, input, token) => {
+  // Configuración de la solicitud con encabezados
+  const headers = {
+    authorization: `Bearer ${token}`,
+  };
   try {
-    const { data } = await axios.put(`${url_api}/tareas/${id}`, input);
+    const { data } = await axios.put(`${url_api}/tareas/${id}`, input, {
+      headers,
+    });
     if (typeof input?.isCompleted == "undefined")
       await showAlertWithTimer(`${icon}\n${data.message}`, "", "success");
     return {
@@ -105,9 +120,13 @@ export const actualizarTarea = async (id, input) => {
   }
 };
 
-export const eliminarTarea = async (id) => {
+export const eliminarTarea = async (id, token) => {
+  // Configuración de la solicitud con encabezados
+  const headers = {
+    authorization: `Bearer ${token}`,
+  };
   try {
-    const { data } = await axios.delete(`${url_api}/tareas/${id}`);
+    const { data } = await axios.delete(`${url_api}/tareas/${id}`, { headers });
     await showAlertWithTimer(`${icon}\n${data.message}`, "", "success");
     return {
       type: DELETE_TASK,
@@ -118,9 +137,13 @@ export const eliminarTarea = async (id) => {
   }
 };
 
-export const eliminarTodo = async () => {
+export const eliminarTodo = async (token) => {
+  // Configuración de la solicitud con encabezados
+  const headers = {
+    authorization: `Bearer ${token}`,
+  };
   try {
-    const { data } = await axios.delete(`${url_api}/tareas`);
+    const { data } = await axios.delete(`${url_api}/tareas`, { headers });
     await showAlertWithTimer(`${icon}\n${data.message}`, "", "success");
     return {
       type: DELETE_ALL_TASKS,

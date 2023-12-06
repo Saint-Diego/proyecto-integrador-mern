@@ -1,27 +1,39 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import ContextTask from "./context/ContextTask";
-import Home from "./components/Home/Home";
+const Dashboard = lazy(() => import("./components/Dashboard/Dashboard"));
 import Login from "./components/Login/Login";
-import NotFound from "./components/NotFound/NotFound";
-import PrivateRoute from "./utils/PrivateRoute";
+const NotFound = lazy(() => import("./components/NotFound/NotFound"));
+import Loading from "./components/Loading/Loading";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 function App() {
   return (
-    <>
-      <ContextTask>
-        <Router>
-          <Routes>
-            <Route index path="" element={<Login />} />
-            <Route element={<PrivateRoute />}>
-              <Route path="home" element={<Home />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
-      </ContextTask>
-    </>
+    <ContextTask>
+      <Router>
+        <Routes>
+          <Route index exact path="/" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          {/* <Route path="dashboard" element={<Dashboard />} /> */}
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={<Loading />}>
+                <NotFound />
+              </Suspense>
+            }
+          />
+        </Routes>
+      </Router>
+    </ContextTask>
   );
 }
 

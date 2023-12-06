@@ -34,7 +34,7 @@ const FormTask = () => {
   const [error, setError] = useState({});
   const [isDisabled, setIsDisabled] = useState(true);
   const [options, setOptions] = useState({ id: 0, action: SAVE });
-  const { todo, dispatch } = useTaskContext();
+  const { user, dispatch } = useTaskContext();
   const inputRef = useRef();
 
   useEffect(() => {
@@ -55,13 +55,19 @@ const FormTask = () => {
     e.preventDefault();
     if (isObjectEmpty(error)) {
       if (options.action === SAVE) {
-        dispatch(await crearTarea({ ...input, _userId: todo?.user?.id }));
+        dispatch(
+          await crearTarea({ ...input, _userId: user?.id }, user?.token)
+        );
       } else if (options.action === EDIT) {
         dispatch(
-          await actualizarTarea(options.id, {
-            ...input,
-            _userId: todo?.user?.id,
-          })
+          await actualizarTarea(
+            options.id,
+            {
+              ...input,
+              _userId: user?.id,
+            },
+            user?.token
+          )
         );
         setOptions({ ...options, action: SAVE });
       }

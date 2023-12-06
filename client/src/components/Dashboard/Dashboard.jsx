@@ -12,7 +12,7 @@ import FormTask from "../FormTask/FormTask";
 import Footer from "../Footer/Footer";
 import NavBar from "../NavBar/NavBar";
 
-const Home = () => {
+const Dashboard = () => {
   return (
     <Flex direction="column" alignItems="center" pb={5}>
       <NavBar />
@@ -33,4 +33,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

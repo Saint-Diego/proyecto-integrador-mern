@@ -10,6 +10,7 @@ import {
   TASKS_PENDING,
   ERROR,
   CLEAR_LOGS,
+  CLEAR_ALL,
 } from "./type";
 
 const taskReducer = (state, action) => {

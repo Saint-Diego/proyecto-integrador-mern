@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { eliminarTodo, obtenerTareasPendientes } from "../../scripts/actions";
 import { useTaskContext } from "../../hooks/useTaskContext";
 import { showAlertDelete } from "../../utils/alerts";
 
 const Footer = () => {
-  const { todo, dispatch } = useTaskContext();
+  const { todo, user, dispatch } = useTaskContext();
 
   useEffect(() => {
     dispatch(obtenerTareasPendientes());
@@ -20,7 +20,7 @@ const Footer = () => {
       true
     );
     if (action.isConfirmed) {
-      dispatch(await eliminarTodo());
+      dispatch(await eliminarTodo(user?.token));
     }
   };
 

@@ -25,13 +25,27 @@ const data = {
 const Login = () => {
   const [input, setInput] = useState(data);
   const [show, setShow] = useState(false);
-  const { todo, dispatch } = useTaskContext();
+  const { todo, user, setUser, dispatch } = useTaskContext();
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     clearInputs();
   }, []);
+
+  useEffect(() => {
+    const {
+      token,
+      user: { id, username },
+    } = todo;
+    setUser({
+      ...user,
+      token,
+      id,
+      username,
+    });
+    return () => navigate("/dashboard");
+  }, [todo?.token, todo?.user?.id]);
 
   const handleChange = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -42,7 +56,6 @@ const Login = () => {
     dispatch(clearLogs());
     dispatch(await login(input));
     clearInputs();
-    navigate("/home");
   };
 
   const handleClick = () => setShow(!show);

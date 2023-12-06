@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Badge,
   Box,
@@ -23,7 +23,7 @@ const Task = ({
   setOptions,
 }) => {
   const [isChecked, setIsChecked] = useState(isCompleted);
-  const { dispatch } = useTaskContext();
+  const { user, dispatch } = useTaskContext();
 
   // useEffect(() => {
   //   const updateTask = async () => {
@@ -35,7 +35,7 @@ const Task = ({
 
   const handleCheck = async () => {
     setIsChecked(!isChecked);
-    dispatch(await actualizarTarea(id, { isCompleted: !isChecked }));
+    dispatch(await actualizarTarea(id, { isCompleted: !isChecked }, user?.token));
   };
 
   const handleClickUpdate = (e) => {
@@ -53,7 +53,7 @@ const Task = ({
       true
     );
     if (response.isConfirmed) {
-      dispatch(await eliminarTarea(id));
+      dispatch(await eliminarTarea(id, user?.token));
     }
   };
 
@@ -62,7 +62,7 @@ const Task = ({
       <Flex
         mb={1}
         borderRadius="md"
-        bgColor={`${isChecked ? "#d1e7dd" : "rgba(248,249,250,1)"}`}
+        bgColor={`${isChecked ? "#d1e7dd" : "#f8f9fa"}`}
       >
         <Box w="100%" ml="3" pt={2} color="#495057">
           <Flex justifyContent="space-between" fontWeight="bold">
